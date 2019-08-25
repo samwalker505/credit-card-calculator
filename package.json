@@ -1,6 +1,7 @@
 {
   "name": "credit-card",
   "version": "0.1.0",
+  "homepage": "http://samwalker505.github.io/credit-card-calculator",
   "private": true,
   "dependencies": {
     "@types/axios": "^0.14.0",
@@ -15,6 +16,8 @@
     "typescript": "3.5.3"
   },
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -34,5 +37,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "gh-pages": "^2.1.1"
   }
 }
