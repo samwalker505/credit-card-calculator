@@ -1,6 +1,7 @@
-import React, { FormEvent } from 'react';
+import React, { FormEvent, MouseEvent } from 'react';
 import './App.css';
-import axios from 'axios'
+import axios from 'axios';
+import ReactGA from 'react-ga';
 
 const client = axios.create({
   baseURL: 'https://api.airtable.com/v0/appJxfRyoGTuGkiIq/Credit%20card%20info'
@@ -36,6 +37,8 @@ class App extends React.Component<{}, { creditCards: CreditCard[], calculatedRes
     if (!this.state || !this.state.creditCards) {
       this.getCreditCards();
     }
+    ReactGA.initialize('UA-91087648-3');
+    ReactGA.pageview('/homepage');
   }
   getCreditCards = async () => {
     try {
@@ -82,6 +85,17 @@ class App extends React.Component<{}, { creditCards: CreditCard[], calculatedRes
     }, { } as { [key: string]: number})
     this.setState({inputs})
     this.calculateResults(inputs);
+  }
+
+  onLinkClicked = (c:CalculatedResult) => {
+    return (e: MouseEvent<HTMLAnchorElement>) => {
+      e.preventDefault();
+      ReactGA.event({
+        category: 'Card',
+        action: JSON.stringify(c),
+      })
+      window.location.href = c.ref;
+    }
   }
 
   render() {
@@ -134,7 +148,7 @@ class App extends React.Component<{}, { creditCards: CreditCard[], calculatedRes
                     return (
                       <tr>
                         <th scope="row">
-                          <a href={c.ref}>{c.credit_card_name}</a>
+                          <a href='#' onClick={this.onLinkClicked(c)}>{c.credit_card_name}</a>
                         </th>
                         <td>{c.bank}</td>
                         <td>{c.effective_spending}</td>
